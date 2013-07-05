@@ -5,3 +5,7 @@ body {
 #datSurround {
   overflow: hidden;
 }
+
+canvas {
+  background-color: black;
+}
