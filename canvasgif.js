@@ -21,14 +21,14 @@
     var textures;
 
     function init() {
-        camera = new THREE.PerspectiveCamera( 75, width / height, 1, 10000 );
-        camera.position.z = 400;
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.z = 600;
 
         window.camera = camera;
 
         scene = new THREE.Scene();
 
-        geometry = new THREE.CubeGeometry( width, height, 0 );
+        geometry = new THREE.CubeGeometry( width, height, width );
 
       textures = [];
       for (var i = 0, l = frames.length; i < l; i++) {
@@ -44,7 +44,7 @@
         scene.add( window.mesh );
 
         renderer = new THREE.WebGLRenderer();
-        renderer.setSize( 2*width, 2*height );
+        renderer.setSize( window.innerWidth, window.innerHeight );
 
         document.body.appendChild( renderer.domElement );
 
