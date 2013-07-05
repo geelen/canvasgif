@@ -1,10 +1,5 @@
 (function() {
-  var surround = document.getElementById("datSurround"),
-      canvas = document.getElementById("datCanvas"),
-      ctx = canvas.getContext("2d");
-
   var sg = new SuperGif({gif: document.getElementsByTagName("img")[0]});
-  canvas.style.webkitTransform = "translate3d(0,0,0)";
 
   sg.load(function() {
     sg.pause();
@@ -16,42 +11,18 @@
       height = sgCanvas.height,
       fullWidth = frames.length * width;
 
-    surround.style.width = width;
-    surround.style.height = height;
-
-    canvas.width = fullWidth;
-    canvas.height = height;
-
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, fullWidth, height);
-
-    for (var i = 0, l = frames.length; i < l; i++) {
-      ctx.putImageData(frames[i].data, width * i, 0);
-    }
-
     var currentFrame = 0;
-    var nextFrame = function() {
-      currentFrame = (currentFrame + 1) % frames.length;
-      canvas.style.webkitTransform = "translate3d(" + currentFrame * -width + "px,0,0)";
-      requestAnimationFrame(nextFrame);
-    };
-    nextFrame();
 
     window.frames = frames;
     sgCanvas.remove();
-
-
 
     var camera, scene, renderer;
     var geometry, material;
     var textures;
 
-    init();
-    animate();
-
     function init() {
         camera = new THREE.PerspectiveCamera( 75, width / height, 1, 10000 );
-        camera.position.z = 200;
+        camera.position.z = 400;
 
         window.camera = camera;
 
@@ -73,24 +44,26 @@
         scene.add( window.mesh );
 
         renderer = new THREE.WebGLRenderer();
-        renderer.setSize( width, height );
+        renderer.setSize( 2*width, 2*height );
 
         document.body.appendChild( renderer.domElement );
 
     }
 
     function animate() {
+      currentFrame = (currentFrame + 1) % frames.length;
       // note: three.js includes requestAnimationFrame shim
       requestAnimationFrame( animate );
 
       material.map = textures[currentFrame];
 
+      mesh.rotation.x += 0.001;
+      mesh.rotation.y += 0.02;
+
       renderer.render( scene, camera );
     }
+
+    init();
+    animate();
   });
-
-  window.datCanvas = canvas;
-  window.datCtx = ctx;
-  window.sg = sg;
-
 })();
